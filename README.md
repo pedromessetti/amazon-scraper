@@ -28,7 +28,7 @@ This project is a web scraper built using the Scrapy Python framework that allow
 2. Create a virtual environment (optional but recommended).
 3. Install the required Python packages using pip:
     
-        pip install scrapy mysql-connector
+        pip install scrapy mysql-connector-python
 
 ## Configuration
 1. Modify the `pipelines.py` file to set up your MySQL database connection. Replace the following parameters with your database credentials:
