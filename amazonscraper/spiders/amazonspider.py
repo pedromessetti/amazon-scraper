@@ -19,15 +19,15 @@ class AmazonSpider(scrapy.Spider):
             f"{search_term.replace(' ', '-')}_{scraped_date}.csv" : {"format": "csv", "encoding": "utf8", "overwrite": True}
         },
         "ITEM_PIPELINES": {
-            "amazonscraper.pipelines.BrandCheckPipeline": 100,
-            "amazonscraper.pipelines.AmazonItemPipeline": 200,
+            "amazonscraper.pipelines.AmazonItemPipeline": 100,
+            "amazonscraper.pipelines.BrandCheckPipeline": 200,
             "amazonscraper.pipelines.PriceRangeCheckPipeline": 300,
-            "amazonscraper.pipelines.DuplicateCheckPipeline": 400,
+            "amazonscraper.pipelines.DuplicateCheckPipeline": 500,
             "amazonscraper.pipelines.SaveToMySQLPipeline": 900
         }
     }    
     if input("Restrict mode? (y/n): ").lower().strip() == "y":
-        custom_settings["ITEM_PIPELINES"]["amazonscraper.pipelines.ProductCheckPipeline"] = 300
+        custom_settings["ITEM_PIPELINES"]["amazonscraper.pipelines.ProductCheckPipeline"] = 400
     
     start_urls = [f'https://www.amazon.com/s?k={search_term.replace(" ", "+")}']
     rules = (
@@ -55,21 +55,27 @@ class AmazonSpider(scrapy.Spider):
         item['max_price'] = self.max_price
         
         # Extract the product name
-        item['name'] = response.xpath("//span[@id='productTitle']/text()").get(default="")
+        item['name'] = response.xpath("//span[@id='productTitle']/text()").get("")
         # Extract the product brand
         item['brand'] = self.parse_brand(response)
         # Extract the product price
-        item['price'] = response.xpath("//span[@class='a-price']//span/text()").get(default="0")
+        item['price'] = self.parse_price(response)
         # Extract the product rating
-        item['rating'] = response.xpath("//div[@id='customerReviews']//span[@data-hook='rating-out-of-text']/text()").get(default="0")
+        item['rating'] = response.xpath("//div[@id='customerReviews']//span[@data-hook='rating-out-of-text']/text()").get("0")
         # Extract the product number of reviews
-        item['num_reviews'] = response.xpath("//div[@id='customerReviews']//div[@data-hook='total-review-count']//span/text()").get(default="0")
+        item['num_reviews'] = response.xpath("//div[@id='customerReviews']//div[@data-hook='total-review-count']//span/text()").get("0")
         # Set the product availability to True by default
         item['available'] = True
         # Product url
         item['url'] = response.url
 
         yield item
+
+    def parse_price(self, response):
+        price = response.xpath("span[@class='a-price']//span[@aria-hidden='true']/text()[normalise-space()]").get("")
+        if not price:
+            price = response.css(".a-price .a-offscreen::text").get("0")
+        return price
 
     def parse_brand(self, response):
         # Locate the 'Brand' span tag
