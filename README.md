@@ -20,7 +20,6 @@ This project is a web scraper built using the Scrapy Python framework that allow
 
 ## Requirements
 - Python 3.6+
-- Scrapy
 - MySQL
 
 ## Installation
