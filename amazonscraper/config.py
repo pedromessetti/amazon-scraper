@@ -5,10 +5,14 @@ def get_search_term():
     return search_term
 
 def get_specific_brand():
-    specific_brand = input("Do you want to search for a specific brand? (y/n): ").lower().strip()
-    if specific_brand == "y":
+    option = input("Search for a specific brand? (y/n): ").lower().strip()
+    while option not in ["y", "n"]:
+        print("Please enter 'y' or 'n'.")
+        option = input("Search for a specific brand? (y/n): ").lower().strip()
+    if option == "y":
         brand = input("Brand: ").lower().strip()
         while brand == "":
+            print("Brand cannot be empty.")
             brand = input("Brand: ").lower().strip()
         return brand
     return None
@@ -16,11 +20,29 @@ def get_specific_brand():
 def get_price_range():
     min_price = None
     max_price = None
-    if input("Do you want to set a price range? (y/n): ").lower().strip() == "y":
-        min_price = float(input("Min price: ").strip())
-        while min_price == "":
-            min_price = float(input("Min price: ").strip())
-        max_price = float(input("Max price: ").strip())
-        while max_price == "":
-            max_price = float(input("Max price: ").strip())
+    option = input("Set a price range? (y/n): ").lower().strip()
+    while option not in ["y", "n"]:
+        print("Please enter 'y' or 'n'.")
+        option = input("Set a price range? (y/n): ").lower().strip()
+    if option == "y":
+        while True:
+            try:
+                min_price = input("Min price: ").strip()
+                if min_price == "":
+                    min_price = None
+                    break
+                min_price = float(min_price)
+                break
+            except ValueError:
+                print("Please enter a valid number.")
+        while True:
+            try:
+                max_price = input("Max price: ").strip()
+                if max_price == "":
+                    max_price = None
+                    break
+                max_price = float(max_price)
+                break
+            except ValueError:
+                print("Please enter a valid number.")
     return min_price, max_price
