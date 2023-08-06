@@ -5,7 +5,7 @@ BOT_NAME = "amazonscraper"
 SPIDER_MODULES = ["amazonscraper.spiders"]
 NEWSPIDER_MODULE = "amazonscraper.spiders"
 
-SCRAPEOPS_API_KEY = 'your_scrapeops_api_key' # Insert your ScrapeOps API key
+SCRAPEOPS_API_KEY = '77ab83ba-f20e-4d50-9754-638db86fb077' # Insert your ScrapeOps API key
 SCRAPEOPS_FAKE_BROWSER_HEADER_ENDPOINT = "https://headers.scrapeops.io/v1/browser-headers"
 SCRAPEOPS_FAKE_BROWSER_HEADER_ENABLED = True
 SCRAPEOPS_NUM_RESULTS = 5
@@ -15,13 +15,13 @@ ROBOTSTXT_OBEY = False
 COOKIES_ENABLED = True
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-CONCURRENT_REQUESTS = 64 # Increase number of concurrent requests
+CONCURRENT_REQUESTS = 32 # Increase number of concurrent requests
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
 DOWNLOAD_DELAY = 0.15 # Small delay between requests to avoid server overwhelming
 
 HTTPCACHE_ENABLED = True
-HTTPCACHE_EXPIRATION_SECS = 86400  # Cache for 24 hours
+HTTPCACHE_EXPIRATION_SECS = 28800  # Cache for 8 hours
 HTTPCACHE_DIR = 'httpcache'
 HTTPCACHE_IGNORE_HTTP_CODES = []
 HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'

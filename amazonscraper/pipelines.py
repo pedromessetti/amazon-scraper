@@ -10,9 +10,9 @@ class SaveToMySQLPipeline:
         # Connect to MySQL database
         self.conn = mysql.connector.connect(
             host = 'localhost',
-            user = 'your_username',           # Replace with your username
-            password = 'your_password',       # Replace with your password
-            database = 'your_database'        # Replace with your database name
+            user = 'admin',
+            password = '&2wsVqMtXL2RMdBc',
+            database = 'amazon'
         )
         self.cur = self.conn.cursor()
 
@@ -70,7 +70,7 @@ class DuplicateCheckPipeline:
 
 class ProductCheckPipeline:
     def process_item(self, item, spider):
-        if item.get('search_term') not in item.get('name').lower().strip():
+        if item.get('search_term') not in item.get('name'):
             raise DropItem(f"Item {item.get('name')} does not contain the search term")
         else:
             return item
@@ -80,7 +80,7 @@ class BrandCheckPipeline:
     def process_item(self, item, spider):
         if item.get('specific_brand') == None:
             return item
-        elif item.get('specific_brand') not in item.get('brand').lower().strip():
+        elif item.get('specific_brand') not in item.get('brand'):
             raise DropItem(f"Item {item.get('name')} does not contain the specific brand")
         else:
             return item
@@ -100,7 +100,7 @@ class AmazonItemPipeline:
     def process_item(self, item, spider):
         adapter = ItemAdapter(item)
 
-        # Remove all whitespaces from all fields except url and date
+        # Remove all whitespaces from name, brand and rating fields
         to_strip = [field for field in adapter.field_names() if field in ['name', 'brand', 'rating']]
         for field in to_strip:
             adapter[field] = adapter.get(field).strip()
@@ -112,8 +112,9 @@ class AmazonItemPipeline:
         #brand = adapter.get('brand')
         #if brand.lower() in name:
         #    name = name.replace(brand.lower(), "").strip()
-        if "(" in name and ")" in name:
-            name = re.sub(r'\([^)]*\)', '', name).strip()
+        # Uncomment to remove paranthesis from name
+        #if "(" in name and ")" in name:
+        #    name = re.sub(r'\([^)]*\)', '', name).strip()
         if "[" in name and "]" in name:
             name = re.sub(r'\[[^)]*\]', '', name).strip()
         if ", " in name:
@@ -127,7 +128,7 @@ class AmazonItemPipeline:
             name = name.split(" and ")[0].strip()
         if " - " in name:
             name = name.split(" -")[0].strip()
-        name = name.replace(",","").strip()
+        name = name.replace(",","").replace(":", "").strip()
         adapter['name'] = name[:255]
 
         # Clean brand field
@@ -145,12 +146,11 @@ class AmazonItemPipeline:
         if adapter['price'] == "0":
             adapter['available'] = False
 
-        # Clean price field
+        # Clean and converts price, rating and num_reviews field
         item['price'] = float(re.sub(r'[^\d.]', '', adapter.get('price')))
-        # Clean rating field
         item['rating'] = float(adapter.get('rating').split(" ")[0])
-        # Clean num_reviews field
         item['num_reviews'] = int(re.sub(r'[^\d.]', '', adapter.get('num_reviews')))
+
         # Limit url to 255 characters
         adapter['url'] = adapter.get('url')[:255]
 

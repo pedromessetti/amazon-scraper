@@ -15,9 +15,6 @@ class AmazonSpider(scrapy.Spider):
     specific_brand = get_specific_brand()
     min_price, max_price = get_price_range()
     custom_settings = {
-        "FEEDS": {
-            f"{search_term.replace(' ', '-')}_{scraped_date}.csv" : {"format": "csv", "encoding": "utf8", "overwrite": True}
-        },
         "ITEM_PIPELINES": {
             "amazonscraper.pipelines.AmazonItemPipeline": 100,
             "amazonscraper.pipelines.BrandCheckPipeline": 200,
