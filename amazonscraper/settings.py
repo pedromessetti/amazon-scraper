@@ -5,7 +5,7 @@ BOT_NAME = "amazonscraper"
 SPIDER_MODULES = ["amazonscraper.spiders"]
 NEWSPIDER_MODULE = "amazonscraper.spiders"
 
-SCRAPEOPS_API_KEY = '77ab83ba-f20e-4d50-9754-638db86fb077' # Insert your ScrapeOps API key
+SCRAPEOPS_API_KEY = 'your_scrapeops_api_key' # Insert your ScrapeOps API key
 SCRAPEOPS_FAKE_BROWSER_HEADER_ENDPOINT = "https://headers.scrapeops.io/v1/browser-headers"
 SCRAPEOPS_FAKE_BROWSER_HEADER_ENABLED = True
 SCRAPEOPS_NUM_RESULTS = 5

@@ -1,7 +1,7 @@
-from scrapy.spiders import Rule
+from amazonscraper.config import get_search_term, get_specific_brand, get_price_range
 from scrapy.linkextractors import LinkExtractor
 from amazonscraper.items import AmazonItem
-from amazonscraper.config import get_search_term, get_specific_brand, get_price_range
+from scrapy.spiders import Rule
 from datetime import date
 import scrapy
 
@@ -35,14 +35,14 @@ class AmazonSpider(scrapy.Spider):
         urls = response.css("h2 a::attr(href)").getall()
         for url in urls:
             relative_url = 'https://www.amazon.com' + url
-            yield scrapy.Request(relative_url, callback=self.parse_amazon_page)
+            yield scrapy.Request(relative_url, callback=self.parse_product_page)
 
         next_page = response.css('a.s-pagination-next::attr(href)').get()
         if next_page is not None:
             next_page_url = 'https://www.amazon.com' + next_page
             yield response.follow(next_page_url, callback=self.parse)
 
-    def parse_amazon_page(self, response):
+    def parse_product_page(self, response):
         item = AmazonItem()
 
         item['search_term'] = self.search_term

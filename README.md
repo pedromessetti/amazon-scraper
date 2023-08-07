@@ -36,9 +36,9 @@ class SaveToMySQLPipeline:
     def __init__(self):
         self.conn = mysql.connector.connect(
             host = 'localhost',
-            user = 'your_user',         # Replace with your username
-            password = 'your_password', # Replace with your password
-            database = 'your_database'  # Replace with your database name
+            user = '',         # Enter your MySQL username
+            password = '',     # Enter your MySQL password
+            database = ''      # Enter your MySQL database name
         )
 ```
 2. You need to enable fake browser headers from ScrapeOps to prevent being blocked by Amazon's anti-scraping measures. To do this, sign up for a ScrapeOps API key and set it as the value of `SCRAPEOPS_API_KEY` in the `settings.py` file.

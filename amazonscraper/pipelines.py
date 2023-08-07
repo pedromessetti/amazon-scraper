@@ -10,9 +10,9 @@ class SaveToMySQLPipeline:
         # Connect to MySQL database
         self.conn = mysql.connector.connect(
             host = 'localhost',
-            user = 'admin',
-            password = '&2wsVqMtXL2RMdBc',
-            database = 'amazon'
+            user = '',         # Enter your MySQL username
+            password = '',     # Enter your MySQL password
+            database = ''      # Enter your MySQL database name
         )
         self.cur = self.conn.cursor()
 
